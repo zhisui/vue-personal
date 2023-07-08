@@ -5,7 +5,7 @@
   "license": "MIT",
   "buildOptions": {
     "name": "VueShared",
-    "fomats": [
+    "formats": [
       "esm-boulder",
       "cjs"
     ]

@@ -1,13 +1,4 @@
 import execa  from 'execa'
-import * as fs from 'fs'
-// import { existsSync, readFileSync } from 'node:fs'
-
-// 获取packages里面的文件夹名称数组
-const dirs = fs.readdirSync('packages').filter((dir) => {
-  return fs.statSync(`packages/${dir}`).isDirectory()
-})
-console.log(dirs)
-
 // 并行打包
 
 async function runParaller(dirs, itemFn) {
@@ -21,11 +12,9 @@ async function runParaller(dirs, itemFn) {
 async function build(target) {
   // execa第一个参数是打包的形式，第二个是一个数组
   // -c 执行rullup配置，环境变量
-  await execa('rollup', ['-c', '--environment', `TARGET:${target}`], {
+  await execa('rollup', ['-wc', '--environment', `TARGET:${target}`], {
     stdio: 'inherit',
   }) //子进程的输出在父进程里边出现
 }
 
-runParaller(dirs, build).then(() => {
-  console.log('打包成功')
-})
+build('shared')

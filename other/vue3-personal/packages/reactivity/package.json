@@ -5,7 +5,7 @@
   "license": "MIT",
   "buildOptions": {
     "name": "VueReactivity",
-    "fomats": [
+    "formats": [
       "esm-boulder",
       "cjs",
       "global"
