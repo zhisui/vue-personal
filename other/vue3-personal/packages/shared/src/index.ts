@@ -1,5 +1,3 @@
-let a = 1
-console.log(a)
-export {
-  a
+export function isObject(target) {
+  return typeof target === 'object' && target !== null
 }

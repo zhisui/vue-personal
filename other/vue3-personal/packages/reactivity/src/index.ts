@@ -1,5 +1,2 @@
-let b = 1
-console.log(b)
-export {
-  b
-}
+// 入口文件
+export { reactive, shallowReactive, readonly,shallowReadonly} from './reactive'

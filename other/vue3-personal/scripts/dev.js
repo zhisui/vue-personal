@@ -17,4 +17,4 @@ async function build(target) {
   }) //子进程的输出在父进程里边出现
 }
 
-build('shared')
+build('reactive')
