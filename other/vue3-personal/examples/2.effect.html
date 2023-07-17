@@ -9,9 +9,13 @@
   <script src="../packages/reactivity/dist/reactivity.global.js"></script>
   <script>
     let { reactive, effect } = VueReactivity
-    let val = reactive({ name: '张三' })
+    let val = reactive({ name: '张三', age: 24 })
     effect(() => {
-      console.log(345)
+      val.name
+      val.age
+    })
+    effect(() => {
+      val.name
     })
   </script>
   <body></body>

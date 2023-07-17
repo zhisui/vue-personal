@@ -11,7 +11,8 @@ let activeEffect
 const effectStack = [] //这个是解决监听函数中再次调用effect时，里层不会收集外层监听函数的依赖，外层也不会收集到里层的依赖
 const creatReactEffect = (fn, obj) => {
   const effect = function reactiveEffect() {
-    if (!effectStack.includes(effect)) { //保证唯一性
+    if (!effectStack.includes(effect)) {
+      //保证唯一性
       try {
         effectStack.push(effect)
         activeEffect = effect
@@ -30,7 +31,23 @@ const creatReactEffect = (fn, obj) => {
   return effect
 }
 
+let targetMap = new WeakMap() //以target为key， Map(target属性值为key => Set(effect)) 为value
 // 收集effect  在获取数据的时候出发get 收集effect
 export function Track(target, type, key) {
-  //对应的key
+  //key和effect一一对应
+  let depMap = targetMap.get(target)
+  if (!depMap) {
+    //没有
+    targetMap.set(target, (depMap = new Map()))
+  }
+  // 有
+  let depSet = depMap.get(key)
+  if (!depSet) {
+    depMap.set(key, (depSet = new Set()))
+  }
+
+  if (!depSet.has(activeEffect)) {
+    depSet.add(activeEffect)
+  }
+  console.log(targetMap, 'targetMap')
 }
