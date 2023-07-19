@@ -1,4 +1,4 @@
-import { isObject, extend } from '@vue/shared'
+import { isObject, extend, isArray, isIntegerKey, hasOwn } from '@vue/shared'
 import { reactive, readonly } from './reactive'
 import { TrackOpTypes } from './operations'
 import { Track } from './effect'
@@ -38,6 +38,16 @@ const shallowReadonlyGet = /*#__PURE__*/ createGetter(true, true)
 function createSetter(shallow = false) {
   return function set(target, key, value, receiver) {
     const result = Reflect.set(target, key, value, receiver)
+    // 判断响应式的数据是数组还是对象，如果是对象的话是添加还是修改
+    const oldValue = target[key]
+    let hasKey = isArray(target) && isIntegerKey(key)? Number(key) < target.length : hasOwn(target, key)
+    if(!hasKey) {
+      // 新增的情况
+
+    }else {
+      // 修改的情况
+    }
+
     return result
   }
 }
