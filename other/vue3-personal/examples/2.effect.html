@@ -9,14 +9,14 @@
   <script src="../packages/reactivity/dist/reactivity.global.js"></script>
   <script>
     let { reactive, effect } = VueReactivity
-    let val = reactive({ name: '张三', age: 24 })
+    let val = reactive({ name: '张三', age: 24 ,list: [1,2,3,4,5,6,7]})
     effect(() => {
-      val.name
-      val.age
+     console.log(val.list[1])
     })
-    effect(() => {
-      val.name
-    })
+    setTimeout(() => {
+      val.list.length = 1
+      console.log(val.list[1],'这里是什么')
+    }, 1000);
   </script>
   <body></body>
 </html>

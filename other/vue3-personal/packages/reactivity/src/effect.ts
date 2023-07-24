@@ -1,3 +1,35 @@
+import { TrackOpTypes, TriggerOpTypes } from './operations'
+import { EffectScope, recordEffectScope } from './effectScope'
+
+export type DebuggerEvent = {
+  effect: ReactiveEffect
+} & DebuggerEventExtraInfo
+
+export type DebuggerEventExtraInfo = {
+  target: object
+  type: TrackOpTypes | TriggerOpTypes
+  key: any
+  newValue?: any
+  oldValue?: any
+  oldTarget?: Map<any, any> | Set<any>
+}
+export type EffectScheduler = (...args: any[]) => any
+export interface DebuggerOptions {
+  onTrack?: (event: DebuggerEvent) => void
+  onTrigger?: (event: DebuggerEvent) => void
+}
+
+export interface ReactiveEffectOptions extends DebuggerOptions {
+  lazy?: boolean
+  scheduler?: EffectScheduler
+  scope?: EffectScope
+  allowRecurse?: boolean
+  onStop?: () => void
+}
+
+export class ReactiveEffect<T = any> {
+}
+
 export const effect = (fn, obj: any = {}) => {
   const effect = creatReactEffect(fn, obj)
   if (!obj.lazy) {
@@ -50,4 +82,26 @@ export function Track(target, type, key) {
     depSet.add(activeEffect)
   }
   console.log(targetMap, 'targetMap')
+}
+
+export function trigger(target, type, key?,newValue?, oldValue?){
+  const depsMap = targetMap.get(target)
+  let effectSet = new Set()
+
+  const add = (effectAdd) => {
+
+    if(effectAdd) {
+      effectAdd.forEach(effect => {
+        effectSet.add(effect)
+
+      });
+    }
+  }
+
+  add(depsMap.get(key)) //这里是去重赋值一样的情况
+  effectSet.forEach((effect:any) =>{
+    console.log(effect, 'effect');
+
+  })
+
 }

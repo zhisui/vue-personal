@@ -1,7 +1,7 @@
 import { isObject, extend, isArray, isIntegerKey, hasOwn } from '@vue/shared'
 import { reactive, readonly } from './reactive'
-import { TrackOpTypes } from './operations'
-import { Track } from './effect'
+import { TrackOpTypes,TriggerOpTypes } from './operations'
+import { Track,trigger } from './effect'
 
 // 一个控制属性是否是只读的，一个控制是否的是深层对想
 function createGetter(isReadonly = false, shallow = false) {
@@ -37,15 +37,18 @@ const shallowReadonlyGet = /*#__PURE__*/ createGetter(true, true)
 // set
 function createSetter(shallow = false) {
   return function set(target, key, value, receiver) {
+    const oldValue = target[key]
     const result = Reflect.set(target, key, value, receiver)
     // 判断响应式的数据是数组还是对象，如果是对象的话是添加还是修改
-    const oldValue = target[key]
     let hasKey = isArray(target) && isIntegerKey(key)? Number(key) < target.length : hasOwn(target, key)
     if(!hasKey) {
       // 新增的情况
+      trigger(target, TriggerOpTypes.ADD, key, value)
 
-    }else {
-      // 修改的情况
+    }else {  // 修改的情况
+     //处理新的值和原来值一样的情况
+     trigger(target, TriggerOpTypes.SET, key, value, oldValue)
+
     }
 
     return result

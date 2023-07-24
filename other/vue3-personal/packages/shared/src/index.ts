@@ -40,3 +40,6 @@ export const isObject = (val: unknown): val is Record<any, any> =>
   key[0] !== '-' &&
   '' + parseInt(key, 10) === key
 
+  export const hasChanged = (value: any, oldValue: any): boolean =>
+  !Object.is(value, oldValue)
+
