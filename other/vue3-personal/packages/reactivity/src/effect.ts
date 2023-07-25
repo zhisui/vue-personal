@@ -1,5 +1,5 @@
 import { TrackOpTypes, TriggerOpTypes } from './operations'
-import { EffectScope, recordEffectScope } from './effectScope'
+// import { EffectScope, recordEffectScope } from './effectScope'
 
 export type DebuggerEvent = {
   effect: ReactiveEffect
@@ -22,7 +22,7 @@ export interface DebuggerOptions {
 export interface ReactiveEffectOptions extends DebuggerOptions {
   lazy?: boolean
   scheduler?: EffectScheduler
-  scope?: EffectScope
+  // scope?: EffectScope
   allowRecurse?: boolean
   onStop?: () => void
 }
@@ -48,7 +48,7 @@ const creatReactEffect = (fn, obj) => {
       try {
         effectStack.push(effect)
         activeEffect = effect
-        fn() //执行用户的方法
+       return  fn() //执行用户的方法
       } finally {
         effectStack.pop()
         activeEffect = effectStack[effectStack.length - 1]
