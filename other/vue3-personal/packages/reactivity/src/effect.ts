@@ -100,6 +100,7 @@ export function trigger(target, type, key?,newValue?, oldValue?){
 
   add(depsMap.get(key)) //这里是去重赋值一样的情况
   effectSet.forEach((effect:any) =>{
+    effect()
     console.log(effect, 'effect');
 
   })
