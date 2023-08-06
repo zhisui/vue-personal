@@ -8,13 +8,14 @@
   </head>
   <script src="../packages/reactivity/dist/reactivity.global.js"></script>
   <script>
-    let { reactive, computed } = VueReactivity
-    let val = reactive({ name: '张三', age: 24 ,list: [1,2,3,4,5,6,7]})
-    computed(() => {
-      console.log('1234');
-      return val.age + 1
+    let { reactive, computed, ref } = VueReactivity
+    let val = ref(10)
+    let newAge = computed(() => {
+      console.log('1234')
+      return val.value + 1
     })
-    console.log(val.age,'val.age');
+    console.log(newAge.value, 'val.age')
+    console.log(newAge.value, 'val.age')
   </script>
   <body></body>
 </html>

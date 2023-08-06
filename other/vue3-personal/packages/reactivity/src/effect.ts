@@ -27,8 +27,7 @@ export interface ReactiveEffectOptions extends DebuggerOptions {
   onStop?: () => void
 }
 
-export class ReactiveEffect<T = any> {
-}
+export class ReactiveEffect<T = any> {}
 
 export const effect = (fn, obj: any = {}) => {
   const effect = creatReactEffect(fn, obj)
@@ -48,7 +47,7 @@ const creatReactEffect = (fn, obj) => {
       try {
         effectStack.push(effect)
         activeEffect = effect
-       return  fn() //执行用户的方法
+        return fn() //执行用户的方法
       } finally {
         effectStack.pop()
         activeEffect = effectStack[effectStack.length - 1]
@@ -84,25 +83,25 @@ export function Track(target, type, key) {
   console.log(targetMap, 'targetMap')
 }
 
-export function trigger(target, type, key?,newValue?, oldValue?){
+export function trigger(target, type, key?, newValue?, oldValue?) {
   const depsMap = targetMap.get(target)
   let effectSet = new Set()
 
   const add = (effectAdd) => {
-
-    if(effectAdd) {
-      effectAdd.forEach(effect => {
+    if (effectAdd) {
+      effectAdd.forEach((effect) => {
         effectSet.add(effect)
-
-      });
+      })
     }
   }
 
   add(depsMap.get(key)) //这里是去重赋值一样的情况
-  effectSet.forEach((effect:any) =>{
-    effect()
-    console.log(effect, 'effect');
-
+  effectSet.forEach((effect: any) => {
+    if (effect.options.sch) {
+      // computed中_dirty = true
+      effect.options.sch(effect)
+    } else {
+      effect()
+    }
   })
-
 }

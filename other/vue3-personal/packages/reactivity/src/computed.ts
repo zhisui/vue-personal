@@ -20,19 +20,26 @@ class ComputedRefImpl {
   public _dirty = true //默认在获取的时候才执行
   public _value
   public effect
-  constructor(getter, setter) {
-
+  constructor(public getter, public setter) {
     this.effect = effect(getter, {
       lazy: true,
+      sch: () => {
+        if (!this._dirty) {
+          this._dirty = true
+        }
+      },
     })
   }
 
   get value() {
-    console.log('执行没有');
     if (this._dirty) {
       this._value = this.effect()
-      console.log(this._value, ' this._value')
+      this._dirty = false
     }
     return this._value
+  }
+
+  set(newValue) {
+     this.setter(newValue)
   }
 }
