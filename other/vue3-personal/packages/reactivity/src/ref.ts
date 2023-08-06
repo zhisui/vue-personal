@@ -1,4 +1,4 @@
-import { hasChanged } from '@vue/shared'
+import { hasChanged, isArray } from '@vue/shared'
 import { Track, trigger } from './effect'
 import { TrackOpTypes, TriggerOpTypes } from './operations'
 
@@ -10,7 +10,7 @@ export function shallowRf(target) {
   return createRef(target, true)
 }
 
-class RefImpl {
+class RefImpl { //感觉这地方没考虑target是对象的情况
   // 属性
   public __v_isRef = true
   public _value
@@ -38,4 +38,34 @@ class RefImpl {
 function createRef(rawValue, shallow = false) {
   // 创建ref对象
   return new RefImpl(rawValue, shallow)
+}
+
+export function  toRef(target,key) {
+  return new  ObjectRefImpl(target, key)
+}
+
+class ObjectRefImpl{
+  public __v_isRfe = true
+  constructor(public target, public key) {
+
+  }
+
+  get value() {
+    return this.target[this.key]
+  }
+
+  set value(newValue) {
+   this.target[this.key] = newValue
+  }
+}
+
+
+// 实现toRefs
+export function toRefs(target) {
+  // 遍历
+  let ret = isArray(target)? new Array(target.length): {}
+  for(let key in target) {
+    ret[key] = toRef(target, key)
+  }
+  return ret
 }
