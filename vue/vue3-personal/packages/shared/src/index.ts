@@ -1,3 +1,5 @@
+export * from './shapeFlags'
+
 export const extend = Object.assign
 
 const hasOwnProperty = Object.prototype.hasOwnProperty
